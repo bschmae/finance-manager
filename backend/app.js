@@ -1,13 +1,21 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+
 const config = require('./utils/config');
 const logger = require('./utils/logger');
+const middleware = require('./utils/middleware');
+
+const userRouter = require('./controllers/users');
+const loginRouter = require('./controllers/login');
+const incomeRouter = require('./controllers/income');
+
 const mongoose = require('mongoose');
+
 
 mongoose.set('strictQuery', false);
 
-logger.info('conneting to', config.MONGODB_URI);
+logger.info('connecting to', config.MONGODB_URI);
 
 mongoose.connect(config.MONGODB_URI)
 .then(() => {
@@ -17,15 +25,12 @@ mongoose.connect(config.MONGODB_URI)
     logger.error('error connecting to MongoDB', error.message);
 });
 
+app.use(cors());
 app.use(express.json())
-app.use(cors);
+app.use(middleware.requestLogger);
 
-app.get('/', (req, res) => {
-    res.send('<h1>Hello</h1>');
-});
-
-app.get('/', (req, res) => {
-    res.send('<h1>Hello</h1>');
-});
+app.use('/api/users', userRouter)
+app.use('/api/login', loginRouter)
+app.use('/api/incomes', incomeRouter);
 
 module.exports = app;
