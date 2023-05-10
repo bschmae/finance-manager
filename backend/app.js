@@ -9,6 +9,7 @@ const middleware = require('./utils/middleware');
 const userRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
 const incomeRouter = require('./controllers/income');
+const expenseRouter = require('./controllers/expenses');
 
 const mongoose = require('mongoose');
 
@@ -32,5 +33,6 @@ app.use(middleware.requestLogger);
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/incomes', incomeRouter);
+app.use('/api/expenses', expenseRouter);
 
 module.exports = app;

@@ -1,10 +1,10 @@
-const incomeRouter = require('express').Router();
-const incomeSchema = require('../models/income');
+const expenseRouter = require('express').Router();
+const expenseSchema = require('../models/expense');
 
-incomeRouter.post('/', async (req, res) => {
+expenseRouter.post('/', async (req, res) => {
     const { title, amount, category, description, date } = req.body;
 
-    const income = new incomeSchema({
+    const expense = new expenseSchema({
         title,
         amount,
         category,
@@ -20,28 +20,28 @@ incomeRouter.post('/', async (req, res) => {
             return res.status(400).json({ error: 'Amount must be a positive number'});
         };
 
-        const savedIncome = await income.save();
-        res.status(201).json(savedIncome);
+        const savedExpense = await expense.save();
+        res.status(201).json(savedExpense);
 
     } catch (error) {
         res.status(500).json({ error: 'server error' });
     };
 });
 
-incomeRouter.get('/', async (req, res) => {
+expenseRouter.get('/', async (req, res) => {
     try {
-        const incomes = await incomeSchema.find({}).sort({createdAt: -1});
-        res.status(200).json(incomes);
+        const expense = await expenseSchema.find({}).sort({createdAt: -1});
+        res.status(200).json(expense);
     } catch (error) {
         res.status(500).json({ error: 'server error' });
     };
 });
 
-incomeRouter.delete('/:id', async (req, res) => {
+expenseRouter.delete('/:id', async (req, res) => {
     const { id } = req.params;
-    incomeSchema.findByIdAndDelete(id)
-        .then((income) => {
-            res.status(200).json({ message: 'income deleted' });
+    expenseSchema.findByIdAndDelete(id)
+        .then((expense) => {
+            res.status(200).json({ message: 'expense deleted' });
         })
         .catch((error) => {
             res.status(500).json(error)
@@ -49,4 +49,4 @@ incomeRouter.delete('/:id', async (req, res) => {
 
 });
 
-module.exports = incomeRouter;
+module.exports = expenseRouter;
